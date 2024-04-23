@@ -7,7 +7,6 @@
             src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
     <script type='text/javascript'
             src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
-</head>
 <body>
     <a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false'
              renderer='antialias: true; alpha: true'>
@@ -26,7 +25,7 @@
                     alert(`첫 번째 GPS 위치를 얻었습니다: 경도 ${e.detail.position.longitude} 위도 ${e.detail.position.latitude}`);
 
                     const entity = document.createElement("a-box");
-                    entity.setAttribute("scale", {x: 10000, y: 10000, z: 10000});
+                    entity.setAttribute("scale", {x: 100, y: 100, z: 100});
                     entity.setAttribute('material', {color: 'blue'});
                     entity.setAttribute('gps-entity-place', {
                         latitude: e.detail.position.latitude + 0.001,

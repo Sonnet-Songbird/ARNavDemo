@@ -19,7 +19,6 @@
                 const x = (Math.random() - 0.5) * 100;
                 const z = (Math.random() - 0.5) * 100;
 
-                //엔티티 추가
 
                 const geom = new THREE.BoxGeometry(size, size, size);
                 const mtl = new THREE.MeshBasicMaterial({color});
@@ -42,11 +41,11 @@
             arjs.startGps();
 
             function render() {
-                if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
-                    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-                    camera.updateProjectionMatrix();
-                }
+                // if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                //     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+                //     camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                //     camera.updateProjectionMatrix();
+                // }
                 renderer.render(scene, camera);
                 requestAnimationFrame(render);
             }
@@ -55,6 +54,8 @@
         }
 
         main();
+
+
     </script>
 </body>
 </html>
