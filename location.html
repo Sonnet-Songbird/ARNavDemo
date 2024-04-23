@@ -3,23 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+    <canvas id="canvas1"></canvas>
 
-</body>
-</html>
-<!DOCTYPE html>
-<head>
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <title>Hello, world!</title>
-    <script src='js/three.js'></script>
-    <script src="jsartoolkit5/artoolkit.min.js"></script>
-</head>
+    <script>
+        import * as THREE from 'three';
+        import * as THREEx from '/threex/ar-threex-location-only';
 
+        function addRandomBoxes(scene, arjs) {
+            for (let i = 0; i < 20; i++) {
+                const color = Math.random() * 0xffffff;
+                const size = Math.random() * 10 + 5;
+                const x = (Math.random() - 0.5) * 100;정
+                const z = (Math.random() - 0.5) * 100;
 
-<script>
+                const geom = new THREE.BoxGeometry(size, size, size);
+                const mtl = new THREE.MeshBasicMaterial({color});
+                const box = new THREE.Mesh(geom, mtl);
 
-</script>
+                arjs.add(box, x, z);
+            }
+        }
 
+        function main() {
+            const canvas = document.getElementById('canvas1');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, 1.33, 0.1, 10000);
+            const renderer = new THREE.WebGLRenderer({canvas});
+
+            const arjs = new THREEx.LocationBased(scene, camera);
+
+            addRandomBoxes(scene, arjs); // 함수 호출로 랜덤한 상자 추가
+
+            arjs.startGps();
+
+            function render() {
+                if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+                    const aspect = canvas.clientWidth / canvas.clientHeight;
+                    camera.aspect = aspect;
+                    camera.updateProjectionMatrix();
+                }
+                renderer.render(scene, camera);
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        main();
+    </script>
 </body>
 </html>

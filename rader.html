@@ -15,7 +15,7 @@
     <canvas id="radarChart" width="400" height="400"></canvas>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             var canvas = document.getElementById('radarChart');
             var ctx = canvas.getContext('2d');
 
@@ -41,6 +41,11 @@
             ctx.arc(centerX + x, centerY + y, radius, 0, Math.PI * 2);
             ctx.fillStyle = color;
             ctx.fill();
+        }
+
+
+        const curruntLocation = () => {
+            navigator.geolocation.getCurrentPosition()
         }
     </script>
 
