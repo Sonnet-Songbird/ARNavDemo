@@ -25,9 +25,8 @@
                 if (!testEntityAdded) {
                     alert(`첫 번째 GPS 위치를 얻었습니다: 경도 ${e.detail.position.longitude} 위도 ${e.detail.position.latitude}`);
 
-                    // 추가된 엔터티가 없으면, 사용자 위치에서 북쪽에 상자를 추가합니다.
                     const entity = document.createElement("a-box");
-                    entity.setAttribute("scale", {x: 10, y: 10, z: 10});
+                    entity.setAttribute("scale", {x: 10000, y: 10000, z: 10000});
                     entity.setAttribute('material', {color: 'blue'});
                     entity.setAttribute('gps-entity-place', {
                         latitude: e.detail.position.latitude + 0.001,
