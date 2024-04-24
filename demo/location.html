@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>AR.js A-Frame</title>
     <script src="../aframe/build/aframe.min.js"></script>
     <!-- Assumes AR.js build is in the 'AR.js' directory -->
@@ -20,17 +21,17 @@
          style='position:absolute; left: 10px; bottom: 2%; z-index:999; background-color: blue; color: white; padding: 10px'>
         Lat:<input id="lat" value="50.000"/>
         Lon: <input id="lon" value="-50.000"/>
-        Min Acc: <input id='minacc' value='1000'/> <input type='button' id='go' value='go'/>
+        Min Acc: <input id='minacc' value='1000'/> <input type='button' id='go' value='go'/> <input type='button' id='toggle' value='박스 고정'/>
     </div>
 </body>
 <script>
+    let updateLocation = true;
     window.onload = () => {
         let testEntitiesAdded = false;
-        alert('If testing the lat/lon manual input on a mobile device, please turn off your GPS to avoid the real location being detected.');
         const el = document.querySelector("[gps-new-camera]");
         el.addEventListener("gps-camera-update-position", e => {
             if (!testEntitiesAdded) {
-                alert(`Got first GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
+                alert(`최초 감지 된 GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
                 const properties = [{
                     color: 'red',
                     latDis: 0.001,
@@ -49,6 +50,7 @@
                     lonDis: 0.001
                 }
                 ];
+                if(updateLocation)
                 for (const prop of properties) {
                     const entity = document.createElement("a-box");
                     entity.setAttribute("scale", {
@@ -61,7 +63,7 @@
                         latitude: e.detail.position.latitude + prop.latDis,
                         longitude: e.detail.position.longitude + prop.lonDis
                     });
-                    entity.setAttribute('anchored','persistent: true');
+                    entity.setAttribute('anchored', 'persistent: true');
                     entity.setAttribute('geometry', "primitive: box");
                     document.querySelector("a-scene").appendChild(entity);
                 }
@@ -80,6 +82,9 @@
                 positionMinAccuracy: minacc
             });
         });
+        document.getElementById("toggle").addEventListener("click", e => {
+            updateLocation = !updateLocation;
+        })
     };
 
 </script>
