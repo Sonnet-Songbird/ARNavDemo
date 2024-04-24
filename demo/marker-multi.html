@@ -39,9 +39,73 @@
         <a-marker preset="hiro">
             <a-entity position="0 0 0" scale="0.05 0.05 0.05"
                       gltf-model="/aframe/examples/image-tracking/nft/trex/scene.gltf"></a-entity>
+            <!-- axios로 fetch 해오는 uri이므로 컨텍스트 루트에서부터 절대경로로 써야함-->
+        </a-marker>
+
+        <!--        <a-assets>-->
+        <!--            <video src="../data/videos/mov_bbb.mp4"-->
+        <!--                   preload="auto" id="vid" response-type="arraybuffer" loop-->
+        <!--                   crossorigin webkit-playsinline autoplay muted playsinline>-->
+        <!--            </video>-->
+        <!--        </a-assets>-->
+
+        <a-marker preset="kanji">
+            <!--            <a-video-->
+            <!--                    src="../data/videos/mov_bbb.mp4"-->
+            <!--                    position='50 150 -100'-->
+            <!--                    rotation='90 0 180'-->
+            <!--                    width='300'-->
+            <!--                    height='175'-->
+            <!--            >-->
+            <!--            </a-video>-->
+            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;' clicker>
+            </a-box>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 </body>
+<script>
+    // window.onload = function () {
+    //     AFRAME.registerComponent('videohandler', {
+    //         init: function () {
+    //             let marker = this.el;
+    //
+    //             this.vid = document.querySelector("#vid");
+    //
+    //             //마커가 시야에 들어올 경우 재생
+    //             marker.addEventListener('markerFound', function () {
+    //                 this.vid.play();
+    //             }.bind(this));
+    //
+    //             //마커가 시야에서 벗어날 경우 중지
+    //             marker.addEventListener('markerLost', function () {
+    //                 this.vid.pause();
+    //                 this.vid.currentTime = 0;
+    //             }.bind(this));
+    //         }
+    //     });
+    // };
 
+    // AFRAME.registerComponent('clicker', {
+    //     schema: {
+    //         txt: {default: 'default'}
+    //     },
+    //     init: function () {
+    //         var data = this.data;
+    //         var el = this.el;
+    //         el.addEventListener('click', function () {
+    //             console.log(data.txt);
+    //         });
+    //     }
+    // });
+    AFRAME.registerComponent('clicker', {// custom component(A Frame 문법)로 만든 custom event(웹 표준).
+        // 3d 그래픽스 요소 간 상호작용에 대해서 직접 모두 구현하는 대신 이 방법으로 각각의 엔티티를 자바스크립트 이벤트 리스너 문법으로 제어할 수 있음.
+        init: function () {
+            this.el.addEventListener('click', e => {
+                alert('Box clicked!');
+            });
+        }
+    });
+
+</script>
 </html>
