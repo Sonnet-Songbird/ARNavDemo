@@ -6,6 +6,22 @@
     <script type='text/javascript' src='../three.js/build/ar-threex-location-only.js'></script>
     <script type='text/javascript' src='../aframe/build/aframe-ar-nft.js'></script>
     <script>
+
+        // AFRAME.registerComponent('clicker', {
+        //     schema: {
+        //         txt: {default: 'default'}
+        //     },
+        //     init: function () {
+        //         var data = this.data;
+        //         var el = this.el;
+        //         el.addEventListener('click', function () {
+        //             console.log(data.txt);
+        //         });
+        //     }
+        // });
+
+        // 3d 그래픽스 요소 간 상호작용에 대해서 직접 모두 구현하는 대신 이 방법으로 각각의 엔티티를 자바스크립트 이벤트 리스너 문법으로 제어할 수 있음.
+        // custom component(A Frame 문법)로 만든 custom event(웹 표준).
         AFRAME.registerComponent('clicker', {
             init: function () {
                 this.el.addEventListener('click', e => {
@@ -22,6 +38,7 @@
             raycaster='near: 0; far: 50000'
             arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false;'
             renderer='antialias: true; alpha: true'>
+
         <a-camera gps-new-camera='simulateLatitude: 51.049; simulateLongitude: -0.723'></a-camera>
         <a-box gps-new-entity-place='latitude: 51.0596; longitude: -0.7170' color='red' scale='200 200 200'
                clicker></a-box>

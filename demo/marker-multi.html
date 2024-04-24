@@ -10,8 +10,13 @@
     <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
         <div style="color: #42a5f5; background-color: rgba(51,107,255,0.5)">다른 element를 넣을 경우</div>
     </div>
+    <!-- embedded를 선언하지 않으면 전체화면 속성의 canvas위에서 작동하기 때문에 화면 전체를 차지함 -->
     <a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
+             vr-mode-ui="enabled: false"
+             cursor='rayOrigin: mouse'
+             raycaster='near: 0; far: 50000'
              renderer='precision: medium;'>
+
 
         <a-marker type='barcode' value='1'>
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:red;'>
@@ -85,27 +90,12 @@
     //         }
     //     });
     // };
-
-    // AFRAME.registerComponent('clicker', {
-    //     schema: {
-    //         txt: {default: 'default'}
-    //     },
-    //     init: function () {
-    //         var data = this.data;
-    //         var el = this.el;
-    //         el.addEventListener('click', function () {
-    //             console.log(data.txt);
-    //         });
-    //     }
-    // });
-    AFRAME.registerComponent('clicker', {// custom component(A Frame 문법)로 만든 custom event(웹 표준).
-        // 3d 그래픽스 요소 간 상호작용에 대해서 직접 모두 구현하는 대신 이 방법으로 각각의 엔티티를 자바스크립트 이벤트 리스너 문법으로 제어할 수 있음.
+    AFRAME.registerComponent('clicker', {
         init: function () {
             this.el.addEventListener('click', e => {
                 alert('Box clicked!');
             });
         }
     });
-
 </script>
 </html>
