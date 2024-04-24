@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<script src="../aframe/build/aframe-master.min.js"></script>
+<script src="../aframe/build/aframe-ar.js"></script>
+<head>
+    <meta charset="utf-8">
+
+</head>
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+    <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+        <div style="color: #42a5f5">위에 뭔가 띄울 수 있음</div>
+    </div>
+    <a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
+             renderer='precision: medium;'>
+
+        <a-marker type='barcode' value='1'>
+            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:red;'>
+                <a-torus-knot radius='0.26' radius-tubular='0.05'
+                              animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
+                </a-torus-knot>
+            </a-box>
+        </a-marker>
+
+        <a-marker type='barcode' value='2'>
+            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:pink;'>
+                <a-torus-knot radius='0.26' radius-tubular='0.05'
+                              animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
+                </a-torus-knot>
+            </a-box>
+        </a-marker>
+
+        <a-marker type='barcode' value='3'>
+            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;'>
+                <a-torus-knot radius='0.26' radius-tubular='0.05'
+                              animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
+                </a-torus-knot>
+            </a-box>
+        </a-marker>
+        <a-marker preset="hiro">
+            <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
+            <a-entity position="0 0 0" scale="0.05 0.05 0.05"
+                      gltf-model="/aframe/examples/image-tracking/nft/trex/scene.gltf"></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+</html>

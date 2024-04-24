@@ -3,68 +3,11 @@
 
 <head>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <!-- we import arjs version without NFT but with marker + location based support -->
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 
 <body style="margin : 0px; overflow: hidden;">
-    <a-scene id="a_scene" vr-mode-ui="enabled: false"
-        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
 
-
-
-        <a-marker preset="hiro">
-            <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
-            <a-entity position="0 0 0" scale="0.05 0.05 0.05"
-                gltf-model="https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"></a-entity>
-        </a-marker>
-        <a-text value="This content will always face you." look-at="[gps-camera]" scale="120 120 120"
-            gps-entity-place="latitude: 35.176328692427866; longitude: 129.12546811659638;"></a-text>
-        <a-camera gps-camera rotation-reader> </a-camera>
-
-    </a-scene>
-
-    <div>
-        재수정 확인용
-    </div>
-
-    <script>
-        let markerList = [
-            { "latitude": "35.175726", "longitude": "129.124960" },
-        ]
-        const scene = document.querySelector("#a_scene")
-        window.addEventListener('DOMContentLoaded', function () {
-            console.log("로드됨")
-            navigator.geolocation.getCurrentPosition((position) => {
-                console.log("위치 받아옴")
-                console.log(position)
-                // doSomething(position.coords.latitude, position.coords.longitude);
-
-                for (let i = 0; i < 20; i++) {
-                    const color = Math.random() * 0xffffff;
-                    const size = Math.random() * 10 + 5;
-                    const x = (Math.random() - 0.5) * 100; // -50 ~ 50
-                    const z = (Math.random() - 0.5) * 100;
-
-                    //엔티티 추가
-                    const entity = document.createElement("a-entity");
-                    entity.setAttribute("position", x + " 0 " + z);
-                    entity.setAttribute("scale", "0.05 0.05 0.05");
-                    entity.setAttribute("gltf-model", "https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf");
-                    // entity.setAttribute("gps-entity-place", "latitude: " + position.coords.latitude + "; longitude: " + position.coords.longitude + ";");
-                    scene.prepend(entity)
-                }
-
-                const entity = document.createElement("a-entity");
-                entity.setAttribute("position", "0 0 0");
-                entity.setAttribute("scale", "0.05 0.05 0.05");
-                entity.setAttribute("gltf-model", "https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf");
-                // entity.setAttribute("gps-entity-place", "latitude: " + position.coords.latitude + "; longitude: " + position.coords.longitude + ";");
-                scene.prepend(entity)
-
-            });
-        });
-    </script>
 </body>
 
 </html>
