@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<script src="../aframe/build/aframe-master.min.js"></script>
+<script src="../aframe/build/aframe-ar.js"></script>
+<script src="../aframe/build/aframe-super-keyboard.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>A-Frame Multi Marker Example</title>
+</head>
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+    <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+        <div style="color: #42a5f5; background-color: rgba(51,107,255,0.5)">다른 element를 넣을 경우</div>
+    </div>
+    <a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
+             cursor='rayOrigin: mouse'
+             raycaster='near: 0; far: 50000'
+             renderer='precision: medium;'>
+
+        <a-marker preset="hiro">
+            <a-entity id="keyboard" super-keyboard="hand: #mouseCursor; imagePath: ../data/images;" keyboard-functions
+                      scale="5 5 5" rotation="-90 0 0"></a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+<script>
+    AFRAME.registerComponent('keyboard-functions', {
+        init: function () {
+            let self = this;
+
+            this.el.addEventListener('superkeyboardinput', function (event) {
+                let text = event.detail.value;
+                console.log("입력: " + text);
+                self.el.setAttribute("super-keyboard", "value", "");
+                document.getElementById("sphere").setAttribute("color", text);
+            });
+
+            this.el.addEventListener('superkeyboarddismiss', function (event) {
+                console.log("Input cleared.");
+                self.el.setAttribute("super-keyboard", "value", "");
+            });
+        },
+
+        tick: function (time, timeDelta) {
+            if (!this.el.object3D.visible)
+                this.el.object3D.visible = true;
+        }
+    });
+</script>
+</html>

@@ -2,11 +2,27 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>AR Exam</title>
 </head>
 <style>
+    @media only screen and (max-width: 600px) {
+        .content.box {
+            width: 95%;
+            margin: auto;
+        }
+
+        .wrapper {
+            width: 50%;
+        }
+
+
+    }
+
     body {
         font-family: Arial, sans-serif;
+        width: 100%;
         margin: 0;
         padding: 20px;
     }
@@ -32,7 +48,7 @@
         <div style="width: 80vw; margin: auto;" class="inner">
             <div class="content box">
                 <article class="docs"
-                         style="border: skyblue solid thick; width: 50rem">
+                         style="border: skyblue solid thick;">
                     <p class="pl20">
                         먼저 <a href="docs/marker.pdf">인식용 마커</a>에서 마커를 인쇄하거나 화면에 띄워 주세요.
                     </p>
@@ -44,7 +60,7 @@
                     </ul>
                 </article>
                 <article class="LinkWrapper"
-                         style="border: skyblue solid thick; width: 50rem">
+                         style="border: skyblue solid thick; ">
                     <h2 class="pl20"> 데모 페이지 </h2>
                     <ul class='linkList'>
                         <li class="link" id="marker-multi"><a href="demo/marker-multi.html">여러 마커 인식(3x3 1,2,3 /
