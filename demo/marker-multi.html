@@ -18,7 +18,7 @@
              renderer='precision: medium;'>
 
 
-        <a-marker type='barcode' value='1'>
+        <a-marker type='barcode' value='1' smooth="true">
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:red;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
@@ -26,7 +26,7 @@
             </a-box>
         </a-marker>
 
-        <a-marker type='barcode' value='2'>
+        <a-marker type='barcode' value='2' smooth="true">
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:pink;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
@@ -34,17 +34,17 @@
             </a-box>
         </a-marker>
 
-        <a-marker type='barcode' value='3'>
+        <a-marker type='barcode' value='3' smooth="true">
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
                 </a-torus-knot>
             </a-box>
         </a-marker>
-        <a-marker preset="hiro">
-            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;' clicker>
-            </a-box>
-            <!-- axios로 fetch 해오는 uri이므로 컨텍스트 루트에서부터 절대경로로 써야함-->
+        <a-marker preset="hiro" smooth="true">
+            <a-entity position="0 0 0" scale="0.05 0.05 0.05"
+                      gltf-model="../aframe/examples/image-tracking/nft/trex/scene.gltf"></a-entity>
+            <!-- axios로 fetch 해오는 uri-->
         </a-marker>
 
         <!--        <a-assets>-->
@@ -54,7 +54,7 @@
         <!--            </video>-->
         <!--        </a-assets>-->
 
-        <a-marker preset="kanji">
+        <a-marker preset="kanji" smooth="true">
             <!--            <a-video-->
             <!--                    src="../data/videos/mov_bbb.mp4"-->
             <!--                    position='50 150 -100'-->
@@ -63,8 +63,8 @@
             <!--                    height='175'-->
             <!--            >-->
             <!--            </a-video>-->
-            <a-entity position="0 0 0" scale="0.05 0.05 0.05"
-                      gltf-model="../aframe/examples/image-tracking/nft/trex/scene.gltf"></a-entity>
+            <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;' clicker>
+            </a-box>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
