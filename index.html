@@ -11,41 +11,47 @@
         padding: 20px;
     }
 
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
     .box {
         border: 2px solid #333;
         padding: 20px;
         margin: 0 10px;
     }
+
+    .pl20 {
+        padding-left: 20px;
+    }
+
 </style>
 <body>
     <div class="wrapper">
         <div style="width: 80vw; margin: auto;" class="inner">
-            <div class="content">
-                <div class="LinkWrapper"
+            <div class="content box">
+                <div class="docs"
                      style="border: skyblue solid thick; width: 50rem">
+                    <p class="pl20">
+                        먼저 아래 링크에서 마커를 인쇄하거나 화면에 띄워 주세요.
+                    </p>
                     <ul class='linkList'>
-                        <li class="link" id="link_marker-multi"><a href="demo/MarkerMulti.html">여러 마커 인식(3x3 1,2,3 / hiro / kanji)</a></li>
-                        <li class="link" id="location-based"><a href="demo/Location.html">GPS 위치 인식</a></li>
-                        <li class="link" id="location-clicker"><a href="demo/LocationClicker.html">클릭 이벤트 리스너</a></li>
-                        <li class="link" id="ocean"><a href="demo/Ocean.html">내장 프리셋과 커뮤니티 컴포넌트</a></li>
+                        <li class="link" id="link_marker_pdf"><a href="docs/marker.pdf">인식용 마커</a></li>
+                        <li class="link" id="link_ppt"><a href="docs/A-Frame demo.pptx">프레임워크 해설 ppt</a></li>
+                        <li class="link" id="link_cam"><a href="docs/AR.js Click Places Example.mp4">클릭 이벤트 실연 영상</a>
+                            <span>(ppt의 영상이 나오지 않는 경우)</span></li>
                     </ul>
                 </div>
                 <br/><br/><br/>
-                <div class="intro"
+                <div class="LinkWrapper"
                      style="border: skyblue solid thick; width: 50rem">
-                    <p>
-
+                    <h2 class="pl20"> 데모 페이지 </h2>
+                    <p class="pl20">
+                        GPS 기반 데모는 가상 위치를 사용할 경우 휴대폰의 GPS 기능을 꺼 주세요.
                     </p>
-                </div>
-                <div>
-
+                    <ul class='linkList'>
+                        <li class="link" id="marker-multi"><a href="demo/marker-multi.html">여러 마커 인식(3x3 1,2,3 /
+                            hiro / kanji)</a></li>
+                        <li class="link" id="location"><a href="demo/Location.html">GPS 위치 인식</a></li>
+                        <li class="link" id="location_clicker"><a href="demo/LocationClicker.html">클릭 이벤트 리스너</a></li>
+                        <li class="link" id="ocean"><a href="demo/Ocean.html">내장 프리셋과 커뮤니티 컴포넌트</a></li>
+                    </ul>
                 </div>
             </div> <!-- container -->
         </div> <!-- wrapper -->
