@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="../aframe/build/aframe-master.min.js"></script>
+<script src="../aframe/build/aframe-ar.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>A-Frame Navigation</title>
+    <script>
+        function initFromQuerystring() {
+            const id = AFRAME.utils.getUrlParameter("posId")
+            if (id) {
+                getPosById()
+            }
+        }
+
+        AFRAME.registerComponent('location-marker', {
+            init: function () {
+                const marker = this.el;
+                const markerId = marker.value
+
+                marker.addEventListener('markerFound', function () {
+                    if (!scanTimeout) {
+                        scanningId = markerId
+                        startScan(marker)
+                    }
+                });
+
+                marker.addEventListener('markerLost', function () {
+                    if (scanningId === markerId) {
+                        cancelScan()
+                        scanTimeout = null;
+                        scanningId = null;
+                    }
+                });
+            }
+        });
+        let scanTimeout = null;
+        let scanningId = null;
+
+        function startScan(marker) {
+            marker.appendChild(loadingElem);
+            return setTimeout(function () {
+                doneScan(scanningId);
+            }, 4000);
+        }
+
+        function cancelScan() {
+            if (scanTimeout) {
+                clearTimeout(scanTimeout);
+            }
+        }
+
+        function doneScan(markerId) {
+            getPosById(markerId)
+        }
+
+
+        function getPosById(posId) {
+
+        }
+
+        const loadingElem = () => {
+            const elem = document.createElement("a-torus");
+            elem.setAttribute("animation", "property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true");
+            return elem;
+        }
+
+    </script>
+
+</head>
+<body>
+    <a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
+             vr-mode-ui="enabled: false"
+             cursor='rayOrigin: mouse'
+             raycaster='near: 0; far: 50000'
+             renderer='precision: medium;'>
+
+
+        <a-marker type='barcode' value='1' smooth="true">
+        </a-marker>
+
+        <a-marker type='barcode' value='2' smooth="true">
+        </a-marker>
+
+        <a-marker type='barcode' value='3' smooth="true">
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+
+
+</html>
