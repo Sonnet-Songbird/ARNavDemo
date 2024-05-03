@@ -5,68 +5,111 @@
 <head>
     <meta charset="utf-8">
     <title>A-Frame Navigation</title>
+    <script src="../data/navigation.js"></script>
     <script>
-        function initFromQuerystring() {
-            const id = AFRAME.utils.getUrlParameter("posId")
-            if (id) {
-                getPosById()
+
+        // 변수 선언
+
+        // location-marker 컴포넌트
+        let scanTimeout = null;
+        let scanningId = null;
+        let scanningElem = null;
+
+
+        // 위치 처리
+        const userLocation = {
+            cameraRig: {}
+            , levelHeight: navRepo.levelHeight()
+            , x: 0
+            , y: 0
+            , z: 0
+            , set: function (x, y, z) {
+                userLocation.x = x;
+                userLocation.y = y;
+                userLocation.z = z * this.levelHeight + 1.5; // 시선의 높이?
+                this.updateLocation();
+            }
+            /**
+             * @param pos 필드에 x, y, z를 가지는 object. x,y는 미터법, z는 level
+             * @param levelHeight 층고. z레벨 당 미터법 높이
+             */
+            , setPos: function (pos) {
+                this.set(pos.x, pos.y, pos.z)
+            }
+
+            , init: function () {
+                const markerId = AFRAME.utils.getUrlParameter("markerId")
+                if (!markerId) {
+                    return;
+                }
+                const pos = navRepo.findPosByMarkerId(markerId)
+                userLocation.setPos(pos)
             }
         }
 
+        const navRoute = {}
+
+        AFRAME.registerComponent(`nav-entity`, {
+            init: function () { // object register
+
+            }
+        })
+        AFRAME.registerComponent(`nav-entity`, {
+            init: function () { // object register
+
+            }
+        })
+
+        // location-marker 컴포넌트
         AFRAME.registerComponent('location-marker', {
             init: function () {
-                const marker = this.el;
-                const markerId = marker.value
-
-                marker.addEventListener('markerFound', function () {
-                    if (!scanTimeout) {
-                        scanningId = markerId
-                        startScan(marker)
-                        console.log("markerFound" + markerId)
+                this.el.addEventListener('markerFound', function () {
+                    if (scanTimeout) {
+                        return;
                     }
+                    const pathfinding = navRepo.letPathfinding().pathfinding()
+                    scanningId = this.getAttribute('value')
+                    scanTimeout = startScan(this)
+                    scanningElem = this;
+                    console.log("markerFound" + this.getAttribute('value'))
                 });
 
-                marker.addEventListener('markerLost', function () {
-                    if (scanningId === markerId) {
-                        clearScan()
+                this.el.addEventListener('markerLost', function () {
+                    if (scanningId !== this.getAttribute('value')) {
+                        return;
                     }
-                    console.log("markerLost" + markerId)
+                    clearScan(this)
+                    console.log("markerLost" + this.getAttribute('value'))
                 });
+
             }
         });
-        let scanTimeout = null;
-        let scanningId = null;
 
         function startScan(marker) {
             console.log("scan started" + scanningId)
-            marker.appendChild(loadingElem);
+            marker.appendChild(loadingElem());
             return setTimeout(function () {
-                doneScan(scanningId);
+                doneScan(marker);
             }, 4000);
         }
 
-        function clearScan() {
-            if (scanTimeout) {
-                clearTimeout(scanTimeout);
-            }
+        function clearScan(marker) {
+            clearTimeout(scanTimeout);
             scanTimeout = null;
             scanningId = null;
             console.log("scan canceled" + scanningId)
+            marker.replaceChildren();
         }
 
-        function doneScan(markerId) {
-            getPosById(markerId)
+        function doneScan(marker) {
+            (marker.getAttribute('value'))
+            clearScan(marker)
             console.log("scan done" + scanningId)
-        }
-
-
-        function getPosById(posId) {
-
         }
 
         const loadingElem = () => {
             const elem = document.createElement("a-torus");
-            elem.setAttribute("animation", "property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true");
+            elem.setAttribute("animation", "property: rotation; to:0 0 360; dur: 5000; easing: linear; loop: true");
             return elem;
         }
 
@@ -74,29 +117,13 @@
 
 </head>
 <body>
-    <!--    <a-scene-->
-    <!--            vr-mode-ui="enabled: false"-->
-    <!--            cursor='rayOrigin: mouse'-->
-    <!--            raycaster='near: 0; far: 50000'-->
-    <!--            arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'-->
-    <!--            renderer='antialias: true; alpha: true'>-->
 
-
-    <!--        <a-marker type='barcode' value='1' smooth="true" location-marker>-->
-    <!--        </a-marker>-->
-
-    <!--        <a-marker type='barcode' value='2' smooth="true" location-marker>-->
-    <!--        </a-marker>-->
-
-    <!--        <a-marker type='barcode' value='3' smooth="true" location-marker>-->
-    <!--        </a-marker>-->
-    <!--        <a-entity camera></a-entity>-->
-    <a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
+    <a-scene arjs='sourceType: webcam; videoTexture: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'
              vr-mode-ui="enabled: false"
              cursor='rayOrigin: mouse'
              raycaster='near: 0; far: 50000'
-             renderer='precision: medium;'>
-        <a-marker type='barcode' value='1' smooth="true" location-marker>
+             renderer='antialias: true; alpha: true'>
+        <a-marker type='barcode' value='1' id='one' smooth="true" location-marker>
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:red;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
@@ -104,7 +131,7 @@
             </a-box>
         </a-marker>
 
-        <a-marker type='barcode' value='2' smooth="true" location-marker>
+        <a-marker type='barcode' value='2' id='two' smooth="true" location-marker>
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:pink;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
@@ -112,7 +139,7 @@
             </a-box>
         </a-marker>
 
-        <a-marker type='barcode' value='3' smooth="true" location-marker>
+        <a-marker type='barcode' value='3' id='three' smooth="true" location-marker>
             <a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:green;'>
                 <a-torus-knot radius='0.26' radius-tubular='0.05'
                               animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">

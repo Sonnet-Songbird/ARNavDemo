@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../data/navigation.js"></script>
+    <title>최단 경로 그리기 예제</title>
+    <style>
+        #myCanvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <div>
+        <button id="findShortestPathBtn">최단 경로 찾기</button>
+        <button id="insertMock">랜덤 데이터 입력</button>
+    </div>
+    <p id="repoCounter"></p>
+    <p>테스트 하시려면 랜덤 데이터 입력 으로 정점과 경로를 추가 하고, 최단 경로 찾기에 표시 되는 정점의 숫자 내에서 번호를 입력해주세요.</p>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+
+        function findShortestPath(startPosId, endPosId) {
+
+            return navRepo.pathfinding(startPosId, endPosId);
+        }
+
+        function drawShortestPath(startPosId, endPosId) {
+            const path = findShortestPath(startPosId, endPosId);
+
+            console.log(" drawShortestPath(startPosId, endPosId) {\n")
+            console.log(path)
+            if (path.length === 0) {
+                alert("해당 하는 경로가 없습니다.");
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawAllRoutes();
+            drawRoute(path, "red", 3);
+        }
+
+        function drawAllRoutes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            navRepo.pathRepo.forEach(function (route) {
+                drawRoute([route.posA, route.posB], "black", 1);
+            });
+        }
+
+        function toCoordinate(posId) {
+            const position = navRepo.posRepo.find(function (pos) {
+                return pos.id === posId;
+            });
+            return position ? {x: position.x * 50 + 400, y: position.y * 50 + 300} : null;
+        }
+
+        function drawRoute(path, color, width) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+
+            ctx.beginPath();
+            for (let i = 0; i < path.length - 1; i++) {
+                const startPos = toCoordinate(path[i]);
+                const endPos = toCoordinate(path[i + 1]);
+                if (startPos && endPos) {
+                    ctx.moveTo(startPos.x, startPos.y);
+                    ctx.lineTo(endPos.x, endPos.y);
+                    if (path.length !== 2) {
+                        console.log(startPos)
+                        console.log(endPos)
+                        console.log(i + "번째")
+                    }
+
+                }
+            }
+            ctx.stroke();
+        }
+
+        document.addEventListener("DOMContentLoaded", updateRepoCounter)
+        {
+            updateRepoCounter()
+        }
+        document.getElementById("findShortestPathBtn").addEventListener("click", function () {
+            const startPosId = parseInt(prompt("출발 위치를 입력하세요:", ""));
+            const endPosId = parseInt(prompt("도착 위치를 입력하세요:", ""));
+            const startPos = navRepo.posRepo.find(pos => pos.id === startPosId)
+            const endPos = navRepo.posRepo.find(pos => pos.id === endPosId)
+            if (isNaN(startPosId) || isNaN(endPosId)) {
+                alert("잘못된 입력입니다.");
+                return;
+            }
+            if (!(startPos || endPos)) {
+                alert("입력에 해당하는 정점이 없습니다.");
+                return;
+            }
+            drawShortestPath(startPosId, endPosId);
+        });
+        document.getElementById("insertMock").addEventListener("click", function () {
+            const posCount = parseInt(prompt("추가할 정점 개수를 입력하세요:", ""));
+            const pathCount = parseInt(prompt("추가할 경로 개수를 입력하세요:", ""));
+
+            if (isNaN(posCount) || isNaN(pathCount)) {
+                alert("잘못된 입력입니다.");
+                return;
+            }
+
+            addRandomPos(posCount)
+            addRandomPath(pathCount)
+            updateRepoCounter()
+        });
+
+        function updateRepoCounter() {
+            const counter = document.querySelector("#repoCounter")
+            const posCount = navRepo.posRepo.length
+            const pathCount = navRepo.pathRepo.length
+            counter.innerHTML = `현재 등록된 정점은 ${posCount}개, 경로는 ${pathCount}개 입니다.`
+        }
+
+    </script>
+</body>
+</html>
