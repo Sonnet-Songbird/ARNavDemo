@@ -19,7 +19,7 @@
         // 위치 처리
         const userLocation = {
             cameraRig: {}
-            , levelHeight: navRepo.levelHeight()
+            , levelHeight: navRepo2D.levelHeight()
             , x: 0
             , y: 0
             , z: 0
@@ -42,7 +42,7 @@
                 if (!markerId) {
                     return;
                 }
-                const pos = navRepo.findPosByMarkerId(markerId)
+                const pos = navRepo2D.findPosByMarkerId(markerId)
                 userLocation.setPos(pos)
             }
         }
@@ -67,7 +67,7 @@
                     if (scanTimeout) {
                         return;
                     }
-                    const pathfinding = navRepo.letPathfinding().pathfinding()
+                    const pathfinding = navRepo2D.letPathfinding().pathfinding()
                     scanningId = this.getAttribute('value')
                     scanTimeout = startScan(this)
                     scanningElem = this;

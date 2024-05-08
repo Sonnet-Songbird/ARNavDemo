@@ -35,8 +35,8 @@
     document.getElementById("findShortestPathBtn").addEventListener("click", function () {
         const startPosId = parseInt(prompt("출발 위치를 입력하세요:", ""));
         const endPosId = parseInt(prompt("도착 위치를 입력하세요:", ""));
-        const startPos = navRepo.posRepo.find(pos => pos.id === startPosId)
-        const endPos = navRepo.posRepo.find(pos => pos.id === endPosId)
+        const startPos = navRepo2D.posRepo.find(pos => pos.id === startPosId)
+        const endPos = navRepo2D.posRepo.find(pos => pos.id === endPosId)
         if (isNaN(startPosId) || isNaN(endPosId)) {
             alert("잘못된 입력입니다.");
             return;
@@ -65,8 +65,8 @@
 
     function updateRepoCounter() {
         const counter = document.querySelector("#repoCounter")
-        const posCount = navRepo.posRepo.length
-        const pathCount = navRepo.pathRepo.length
+        const posCount = navRepo2D.posRepo.length
+        const pathCount = navRepo2D.pathRepo.length
         counter.innerHTML = `현재 등록된 정점은 ${posCount}개, 경로는 ${pathCount}개 입니다.`
     }
 </script>

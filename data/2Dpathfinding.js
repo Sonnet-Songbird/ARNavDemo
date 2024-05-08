@@ -12,7 +12,7 @@ const clearCanvas = function (canvas) {
 }
 
 const findShortestPath = function (startPosId, endPosId) {
-    return navRepo.pathfinding(startPosId, endPosId);
+    return navRepo2D.pathfinding(startPosId, endPosId);
 };
 
 const drawShortestPath = function (startPosId, endPosId) {
@@ -27,13 +27,13 @@ const drawShortestPath = function (startPosId, endPosId) {
 
 const drawAllRoutes = function () {
     clearCanvas(canvas);
-    navRepo.pathRepo.forEach(function (route) {
+    navRepo2D.pathRepo.forEach(function (route) {
         drawRoute([route.posA, route.posB], "black", 1);
     });
 };
 
 const toCoordinate = function (posId) {
-    const position = navRepo.posRepo.find(pos => pos.id === posId)
+    const position = navRepo2D.posRepo.find(pos => pos.id === posId)
     let offsetX = 0;
     let offsetY = 0;
     if (canvas.dataset.offsetX) {

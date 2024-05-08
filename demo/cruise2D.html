@@ -75,8 +75,8 @@
 
     function updateRepoCounter() {
         const counter = document.querySelector("#repoCounter")
-        const posCount = navRepo.posRepo.length
-        const pathCount = navRepo.pathRepo.length
+        const posCount = navRepo2D.posRepo.length
+        const pathCount = navRepo2D.pathRepo.length
         counter.innerHTML = `현재 등록된 정점은 ${posCount}개, 경로는 ${pathCount}개 입니다.`
     }
 
@@ -89,7 +89,7 @@
     }
 
     function setMockRepo() {
-        navRepo.empty()
+        navRepo2D.empty()
         cruise2DPos()
     }
 
@@ -123,14 +123,14 @@
         , pushSelectPos: function (pos) {
             if (this.selected[0] === pos)
                 return;
-            this.selected.push(navRepo.findPosById(pos.id))
+            this.selected.push(navRepo2D.findPosById(pos.id))
             this.updateSelected();
         }
         , findPosElementById: function (id) {
             return document.querySelector(`.pos[data-pos-id="${id}"]`);
         }
         , initPosElement: function () {
-            navRepo.posRepo.forEach((pos) => {
+            navRepo2D.posRepo.forEach((pos) => {
                 if (pos.name.charAt(0) === 'R') {
                     return;
                 }

@@ -14,7 +14,7 @@ class Path {
 
 function addRandomPos(count) {
     for (let i = 0; i < count; i++) {
-        const repo = navRepo.posRepo
+        const repo = navRepo2D.posRepo
         const id = repo.length + 1
         const pos = {
             "id": id,
@@ -30,9 +30,9 @@ function addRandomPos(count) {
 
 function addRandomPath(count) {
     for (let i = 0; i < count; i++) {
-        const repo = navRepo.pathRepo
+        const repo = navRepo2D.pathRepo
         const id = repo.length + 1
-        const path = new Path(id, `random ${count}`, Math.floor(Math.random() * navRepo.posRepo.length + 1), Math.floor(Math.random() * navRepo.posRepo.length + 1));
+        const path = new Path(id, `random ${count}`, Math.floor(Math.random() * navRepo2D.posRepo.length + 1), Math.floor(Math.random() * navRepo2D.posRepo.length + 1));
         if (path.posA !== path.posB) {
             repo.push(path);
         }
@@ -40,7 +40,7 @@ function addRandomPath(count) {
 }
 
 // 예시 사용법
-const navRepo = {
+const navRepo2D = {
     //상수부
     levelHeight: 3.9
 
@@ -69,12 +69,12 @@ const navRepo = {
 
     //함수부
     , findPosByMarkerId: function (markerId) {
-        const foundMarker = navRepo.markerRepo.find(marker => marker.id === markerId);
+        const foundMarker = navRepo2D.markerRepo.find(marker => marker.id === markerId);
         if (!foundMarker) return null; // 마커가 없으면 null 반환
-        return navRepo.posRepo.find(pos => pos.id === foundMarker.posId);
+        return navRepo2D.posRepo.find(pos => pos.id === foundMarker.posId);
     }
     , findPosById: function (Id) {
-        return navRepo.posRepo.find(pos => pos.id === Id);
+        return navRepo2D.posRepo.find(pos => pos.id === Id);
     }
     , pathfinding: function (startPosId, endPosId) {
         const graph = new DijkstraGraph();
