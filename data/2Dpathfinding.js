@@ -42,7 +42,7 @@ const toCoordinate = function (posId) {
     if (canvas.dataset.offsetY) {
         offsetY = canvas.dataset.offsetY;
     }
-    return position ? {x: position.x + offsetX, y: position.y + offsetY} : null;
+    return position ? {x: position.x + Number(offsetX), y: position.y + Number(offsetY)} : null;
 };
 
 const drawRoute = function (path, color, width) {
@@ -52,7 +52,9 @@ const drawRoute = function (path, color, width) {
     ctx.beginPath();
     for (let i = 0; i < path.length - 1; i++) {
         const startPos = toCoordinate(path[i]);
+        console.log(startPos)
         const endPos = toCoordinate(path[i + 1]);
+        console.log(endPos)
         if (startPos && endPos) {
             ctx.moveTo(startPos.x, startPos.y);
             ctx.lineTo(endPos.x, endPos.y);
