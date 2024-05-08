@@ -1,53 +1,88 @@
-//급조된 구버전
+class Coordinate {
+    constructor(x, y, z = 0) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+}
 
+const relativeCoordinate = {
+    origin: new Coordinate(0, 0, 0)
+    , getRelativeCoordinate(targetCoordinate) {
+        const convertedX = Math.abs(this.origin.x - targetCoordinate.x)
+        const convertedY = Math.abs(this.origin.y - targetCoordinate.y)
+        const convertedZ = Math.abs(this.origin.z - targetCoordinate.z)
+    }
+    , setOrigin(coordinate) {
+        this.origin = coordinate
+    }
+}
+
+class pos {
+    constructor(id, name, coordinate, type) {
+        this.id = id;
+        this.name = name;
+        this.coordinate = coordinate;
+        this.type = type
+    }
+    static type = {
+        POI: "PoI" // 현실에 유의미한 관심지점
+        , RELAY: "Relay" // 내비게이션을 위한 정적 가상 지점
+        , DYNAMIC: "DYNAMIC" // 내비게이션을 위한 정적 관심 지점
+    }
+    get x() {
+        return this.coordinate.x;
+    }
+
+    get y() {
+        return this.coordinate.y;
+    }
+
+    get z() {
+        return this.coordinate.z;
+    }
+
+    equals(target) {
+        return this.id === target.id;
+    }
+}
+
+/*
+poi와 relay는 모두 pos가 될 수 있음.
+* */
 class Path {
     constructor(id, name, posA, posB, restrict) {
         this.id = id;
         this.name = name;
         this.posA = posA;
         this.posB = posB;
-        this.restrict = restrict; // 0 : 양방향 가능; 1: A to B; 2: B to A; 3 어느 쪽도 불가
+        this.restrict = restrict;
+    }
+
+    static restrict = {
+        AB: "AtoB"
+        , BA: "BtoA"
+        , BOTH: "Both"
+        , NONE: "None"
+    }
+    static trait = { // 요구에 따라 사용될 수도 있는 경로 특성. 현재는 미사용
+        STAIR: "stair" // 계단을 통과 하는 경로는 피할 수 있음.
+    }
+    equals(target) {
+        //정순이나 역순으로 동일한 pos일 경우
+        return this.posA.equals(target.posA) && this.posB.equals(target.posB) || this.posB.equals(target.posA) && this.posA.equals(target.posB);
     }
 
     pathLength() {
-        const posA = navRepo2D.findPosById(this.posA);
-        const posB = navRepo2D.findPosById(this.posB);
-        return Math.hypot(posA.x - posB.x, posA.y - posB.y);
-    }
-}
-
-function addRandomPos(count) {
-    for (let i = 0; i < count; i++) {
-        const repo = navRepo2D.posRepo
-        const id = repo.length + 1
-        const pos = {
-            "id": id,
-            "name": `random ${count}`,
-            "x": (Math.floor(Math.random() * 201 - 100) / 20) * 50,
-            "y": (Math.floor(Math.random() * 201 - 100) / 20) * 50,
-            "z": 0,
-            "restrict": 0
+        if (this.restrict === Path.restrict.NONE) {
+            return Infinity;
         }
-        repo.push(pos)
+        return Math.hypot(this.posA.x - this.posB.x, this.posA.y - this.posB.y);
     }
 }
 
-function addRandomPath(count) {
-    for (let i = 0; i < count; i++) {
-        const repo = navRepo2D.pathRepo
-        const id = repo.length + 1
-        const path = new Path(id, `random ${count}`, Math.floor(Math.random() * navRepo2D.posRepo.length + 1), Math.floor(Math.random() * navRepo2D.posRepo.length + 1));
-        if (path.posA !== path.posB) {
-            repo.push(path);
-        }
-    }
-}
-
-// 예시 사용법
-const navRepo2D = {
-    //상수부
+const navRepo3D = {
     levelHeight: 3.9
-
     , posRepo: [
         {"id": 1, "name": "기준점", "x": 0, "y": 0, "z": 0}
         , {"id": 2, "name": "x100", "x": 100, "y": 0, "z": 0}
@@ -134,7 +169,6 @@ class DijkstraGraph {
             this.adjacencyList[vertex2].push({node: vertex1, weight})
         }
     }
-
 
     pathfinding(start, finish) {
         const nodes = new PriorityQueue();

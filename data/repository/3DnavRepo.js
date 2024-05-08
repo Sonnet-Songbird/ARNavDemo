@@ -1,3 +1,0 @@
-const navRepo3D = {
-
-}
