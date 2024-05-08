@@ -85,7 +85,6 @@ const navRepo = {
             graph.addEdge(path.posA, path.posB, path.pathLength(), path.restrict);
         });
         return graph.pathfinding(startPosId, endPosId)
-        // return this.routeToPath(route);
     }
     , empty: function () {
         this.posRepo = []
@@ -105,31 +104,11 @@ const navRepo = {
         return id;
     }
     , pushPath: function (name, posA, posB) {
-        // if (typeof posA == "number"){
-        //     posA = this.findPosById(posA);
-        // }
-        // if (typeof posB == "number"){
-        //     posB = this.findPosById(posB);
-        // }
-        // if (posA === posB) {
-        //     return;
-        // }
         const id = this.pathRepo.length + 1
         const path = new Path(id, `${name}`, posA, posB, 0);
         this.pathRepo.push(path);
         return path;
     }
-    // , routeToPath: function (route) {
-    //     const path = []
-    //     for (let i = 0; i < route.length - 1; i++) {
-    //         path.push(((posA, posB) => {
-    //             return this.pathRepo.find(path => path.posA === posA && path.posB === posB);
-    //         })(route[i], route[i + 1]));
-    //     }
-    //     console.log("path")
-    //     console.log(path)
-    //     return path;
-    // }
 }
 
 class DijkstraGraph {
