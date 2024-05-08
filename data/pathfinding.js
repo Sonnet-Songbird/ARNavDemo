@@ -26,7 +26,7 @@ const drawShortestPath = (function () {
             return false;
         }
 
-        drawRouteAnimated(path, "red", 3, 2000);
+        drawRouteAnimated(path, "red", 3, (500 + path.length*200));
         return true;
     };
 })();
