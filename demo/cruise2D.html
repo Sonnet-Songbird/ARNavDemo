@@ -121,8 +121,6 @@
             document.querySelectorAll(`.pos`).forEach(pos => pos.style.display = 'block')
         }
         , pushSelectPos: function (pos) {
-            console.log(pos)
-            console.log(!this.selected[0] === pos)
             if (this.selected[0] === pos)
                 return;
             this.selected.push(navRepo.findPosById(pos.id))
