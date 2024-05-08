@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2d 이미지 상 내비게이션 데모</title>
+    <style>
+        #canvasView {
+            border: 1px solid #000;
+        }
+
+        #menuWrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            width: 100vw;
+        }
+
+        .posIcon {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+            cursor: pointer;
+        }
+    </style>
+    <script src="../data/navigation.js"></script>
+    <script src="../data/pathfinding.js"></script>
+    <script src="../data/repository/cruise2DRepo.js"></script>
+
+</head>
+<body>
+    <div id="canvasWrapper">
+        <canvas id="canvasView" width="330" height="2350" data-no-all-routes="true"></canvas>
+    </div>
+
+    <div id="menuWrapper">
+        <div>
+            <button id="resetSelected">초기화</button>
+            <button id="showAllRoutes">등록된 전체 경로 보이기</button>
+        </div>
+        <p id="tutor"></p>
+        <p id="repoCounter"></p>
+        <p id="posName"></p>
+    </div> <!--/menuWrapper-->
+</body>
+<script>
+    const canvas = document.getElementById("canvasView");
+    const ctx = canvas.getContext("2d");
+    const canvasPostprocessing = function (canvas) {
+        canvas.getContext("2d").drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
+    }
+    const canvasBackground = new Image();
+    canvasBackground.onload = function () {
+        canvasPostprocessing(canvas, canvasBackground); // 이미지가 로드된 후 canvasPostprocessing 함수 호출
+    };
+    canvasBackground.src = "../data/images/cruise-deck.jpg"; // 이미지 경로 할당
+
+    document.addEventListener("DOMContentLoaded", function () {
+        setMockRepo();
+        updateRepoCounter();
+        posSelector.initPosElement();
+    });
+
+    document.querySelector("#resetSelected").addEventListener("click", function () {
+        posSelector.clearSelect()
+    });
+    document.querySelector("#showAllRoutes").addEventListener("click", function () {
+        drawAllRoutes();
+        this.dataset.toggled = "true";
+    });
+
+    function updateRepoCounter() {
+        const counter = document.querySelector("#repoCounter")
+        const posCount = navRepo.posRepo.length
+        const pathCount = navRepo.pathRepo.length
+        counter.innerHTML = `현재 등록된 정점은 ${posCount}개, 경로는 ${pathCount}개 입니다.`
+    }
+
+    function updatePosTooltip(posName) {
+        let str = ""
+        if (posName) {
+            str = posName;
+        }
+        document.querySelector("#posName").textContent = str;
+    }
+
+    function setMockRepo() {
+        navRepo.empty()
+        cruise2DPos()
+    }
+
+    const posSelector = {
+        selected: []
+        , tutor: document.querySelector("#tutor")
+        , updateSelected: function () {
+            switch (this.selected.length) {
+                case 0:
+                    this.tutor.textContent = `경로를 안내 받을 지점을 선택 해 주세요.`
+                    break;
+                case 1:
+                    this.tutor.textContent = `${this.selected[0].name}가 출발점으로 선택 되었습니다.`
+                    this.findPosElementById(this.selected[0].id).style.display = 'none'
+                    break;
+                case 2:
+                    this.tutor.textContent = `${this.selected[0].name}에서 부터 ${this.selected[0].name}까지의 경로를 보여드리겠습니다.`
+                    document.querySelectorAll(`.pos`).forEach(pos => pos.style.display = 'none')
+                    drawShortestPath(this.selected[0].id, this.selected[1].id)
+                    break;
+                default:
+                    this.tutor.textContent = `오류가 발생했습니다. 페이지를 새로고침 해주세요.`
+            }
+        }
+        , clearSelect: function () {
+            this.selected = [];
+            this.updateSelected();
+            clearCanvas(canvas)
+            document.querySelectorAll(`.pos`).forEach(pos => pos.style.display = 'block')
+        }
+        , pushSelectPos: function (pos) {
+            console.log(pos)
+            console.log(!this.selected[0] === pos)
+            if (this.selected[0] === pos)
+                return;
+            this.selected.push(navRepo.findPosById(pos.id))
+            this.updateSelected();
+        }
+        , findPosElementById: function (id) {
+            return document.querySelector(`.pos[data-pos-id="${id}"]`);
+        }
+        , initPosElement: function () {
+            navRepo.posRepo.forEach((pos) => {
+                if (pos.name.charAt(0) === 'R') {
+                    return;
+                }
+                this.appendPosElement(pos)
+                this.updateSelected()
+            })
+        }
+        , appendPosElement: function (pos) {
+            if (this.findPosElementById(pos.id)) {
+                return;
+            }
+            const posElement = document.createElement('div');
+            posElement.className = 'pos'
+            posElement.style.position = 'absolute';
+            posElement.style.width = '15px';
+            posElement.style.height = '15px';
+            posElement.style.backgroundColor = 'red';
+            posElement.style.borderRadius = '50%';
+            posElement.style.cursor = 'pointer';
+            posElement.style.transition = 'transform 0.3s';
+
+
+            posElement.addEventListener('mouseenter', function () {
+                posElement.style.transform = 'scale(1.2)';
+                updatePosTooltip(pos.name)
+            });
+            posElement.addEventListener('mouseleave', function () {
+                posElement.style.transform = 'scale(1)';
+                updatePosTooltip("")
+            });
+            posElement.addEventListener('click', function () {
+                posSelector.pushSelectPos(pos)
+            });
+
+            posElement.style.top = `${pos.y}px`;
+            posElement.style.left = `${pos.x}px`;
+            posElement.dataset.posId = `${pos.id}`;
+            posElement.dataset.name = `${pos.name}`;
+
+            document.querySelector('#canvasWrapper').appendChild(posElement)
+            return posElement;
+        }
+    }
+
+
+</script>
+</html>

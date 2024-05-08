@@ -1,42 +1,62 @@
-const findShortestPath = (function() {
-    return function(startPosId, endPosId) {
+// const canvas = document.getElementById("canvasView");
+// const ctx = canvas.getContext("2d"); 필요.
+// const canvasPostprocessing
+// 클로저 어느 쪽 방식으로 할까
+
+const clearCanvas = function (canvas) {
+    console.log(canvas)
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (typeof canvasPostprocessing !== 'undefined') {
+        canvasPostprocessing(canvas);
+        console.log(canvasPostprocessing)
+    }
+}
+
+const findShortestPath = (function () {
+    return function (startPosId, endPosId) {
         return navRepo.pathfinding(startPosId, endPosId);
     };
 })();
 
-const drawShortestPath = (function() {
-    return function(startPosId, endPosId) {
+const drawShortestPath = (function () {
+    return function (startPosId, endPosId) {
         const path = findShortestPath(startPosId, endPosId);
         if (path.length === 0) {
             return false;
         }
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawRouteAnimated(path, "red", 3, 2000);
         return true;
     };
 })();
 
-const drawAllRoutes = (function() {
-    return function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        navRepo.pathRepo.forEach(function(route) {
+const drawAllRoutes = (function () {
+    return function () {
+        clearCanvas(canvas);
+        navRepo.pathRepo.forEach(function (route) {
             drawRoute([route.posA, route.posB], "black", 1);
         });
     };
 })();
 
-const toCoordinate = (function() {
-    return function(posId) {
-        const position = navRepo.posRepo.find(function(pos) {
-            return pos.id === posId;
-        });
-        return position ? { x: position.x * 50 + 400, y: position.y * 50 + 300 } : null;
+const toCoordinate = (function () {
+    return function (posId) {
+        const position = navRepo.posRepo.find(pos => pos.id === posId)
+        let offsetX = 0;
+        let offsetY = 0;
+        if (canvas.dataset.offsetX) {
+            offsetX = canvas.dataset.offsetX;
+        }
+        if (canvas.dataset.offsetY) {
+            offsetY = canvas.dataset.offsetY;
+        }
+        return position ? {x: position.x + offsetX, y: position.y + offsetY} : null;
     };
 })();
 
-const drawRoute = (function() {
-    return function(path, color, width) {
+const drawRoute = (function () {
+    return function (path, color, width) {
         ctx.strokeStyle = color;
         ctx.lineWidth = width;
 
@@ -53,8 +73,8 @@ const drawRoute = (function() {
     };
 })();
 
-const drawPartialRoute = (function() {
-    return function(startPos, endPos, color, width, partialLength) {
+const drawPartialRoute = (function () {
+    return function (startPos, endPos, color, width, partialLength) {
         const segmentLength = Math.sqrt((endPos.x - startPos.x) ** 2 + (endPos.y - startPos.y) ** 2);
         const ratio = partialLength / segmentLength;
         const partialEndX = startPos.x + (endPos.x - startPos.x) * ratio;
@@ -68,17 +88,19 @@ const drawPartialRoute = (function() {
     };
 })();
 
-const drawRouteAnimated = (function() {
-    return function(path, color, width, duration) {
+const drawRouteAnimated = (function () {
+    return function (path, color, width, duration) {
         let startTime = null;
         const totalLength = calcLength(path);
-        const animateDraw = function(currentTime) {
+        const animateDraw = function (currentTime) {
             if (!startTime) startTime = currentTime;
             let progress = Math.min(1, (currentTime - startTime) / duration);
             const partialLength = progress * totalLength;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawAllRoutes();
+            clearCanvas(canvas);
+            if (!canvas.dataset.noAllRoutes) {
+                drawAllRoutes();
+            }
             let remainingLength = partialLength;
             for (let i = 0; i < path.length - 1; i++) {
                 const startPos = toCoordinate(path[i]);
@@ -105,8 +127,8 @@ const drawRouteAnimated = (function() {
     };
 })();
 
-const calcLength = (function() {
-    return function(path) {
+const calcLength = (function () {
+    return function (path) {
         let totalLength = 0;
         for (let i = 0; i < path.length - 1; i++) {
             const startPos = toCoordinate(path[i]);

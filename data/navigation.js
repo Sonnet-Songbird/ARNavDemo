@@ -4,7 +4,7 @@ class Path {
         this.name = name;
         this.posA = posA;
         this.posB = posB;
-        this.restrict = restrict;
+        this.restrict = restrict; // 0 : 양방향 가능; 1: A to B; 2: B to A; 3 어느 쪽도 불가
     }
 
     pathLength() {
@@ -19,8 +19,8 @@ function addRandomPos(count) {
         const pos = {
             "id": id,
             "name": `random ${count}`,
-            "x": Math.floor(Math.random() * 201 - 100) / 20,
-            "y": Math.floor(Math.random() * 201 - 100) / 20,
+            "x": (Math.floor(Math.random() * 201 - 100) / 20) * 50,
+            "y": (Math.floor(Math.random() * 201 - 100) / 20) * 50,
             "z": 0,
             "restrict": 0
         }
@@ -46,14 +46,11 @@ const navRepo = {
 
     , posRepo: [
         {"id": 1, "name": "기준점", "x": 0, "y": 0, "z": 0}
-        , {"id": 2, "name": "x2", "x": 2, "y": 0, "z": 0}
-        , {"id": 3, "name": "x-2", "x": -2, "y": 0, "z": 0}
-        , {"id": 4, "name": "y2", "x": 0, "y": 2, "z": 0}
-        , {"id": 5, "name": "y-2", "x": 0, "y": -2, "z": 0}
+        , {"id": 2, "name": "x100", "x": 100, "y": 0, "z": 0}
+        , {"id": 3, "name": "x-100", "x": -100, "y": 0, "z": 0}
+        , {"id": 4, "name": "y100", "x": 0, "y": 100, "z": 0}
+        , {"id": 5, "name": "y-100", "x": 0, "y": -100, "z": 0}
         , {"id": 6, "name": "z2", "x": 0, "y": 0, "z": 2}
-        , {"id": 7, "name": "rand1", "x": 0, "y": 0, "z": 0}
-        , {"id": 8, "name": "rand2", "x": 0, "y": 0, "z": 0}
-        , {"id": 9, "name": "rand3", "x": 0, "y": 0, "z": 0}
     ]
     , markerRepo: [
         {"id": 1, "name": "바코드1", "posId": 1},
@@ -61,7 +58,7 @@ const navRepo = {
         {"id": 3, "name": "바코드3", "posId": 3},
         {"id": 4, "name": "바코드4", "posId": 4}
     ]
-    , pathRepo: [ // restrict 0 : 양방향 가능; 1: A to B; 2: B to A; 3 어느 쪽도 불가
+    , pathRepo: [
         new Path(1, "test", 2, 3, 0),
         new Path(2, "test", 3, 4, 0),
         new Path(3, "test", 4, 5, 0),
@@ -69,10 +66,15 @@ const navRepo = {
         new Path(5, "test", 3, 6, 0),
         new Path(6, "test", 2, 5, 0)
     ]
-    , findPosByMarkerId: (markerId) => {
+
+    //함수부
+    , findPosByMarkerId: function (markerId) {
         const foundMarker = navRepo.markerRepo.find(marker => marker.id === markerId);
         if (!foundMarker) return null; // 마커가 없으면 null 반환
         return navRepo.posRepo.find(pos => pos.id === foundMarker.posId);
+    }
+    , findPosById: function (Id) {
+        return navRepo.posRepo.find(pos => pos.id === Id);
     }
     , pathfinding: function (startPosId, endPosId) {
         const graph = new DijkstraGraph();
@@ -84,7 +86,38 @@ const navRepo = {
         });
         return graph.pathfinding(startPosId, endPosId)
         // return this.routeToPath(route);
-
+    }
+    , empty: function () {
+        this.posRepo = []
+        this.markerRepo = []
+        this.pathRepo = []
+    }
+    , pushPos: function (name, x, y, z) {
+        const id = this.posRepo.length + 1
+        const pos = {
+            "id": id
+            , "name": `${name}`
+            , "x": x
+            , "y": y
+            , "z": z
+        }
+        this.posRepo.push(pos)
+        return id;
+    }
+    , pushPath: function (name, posA, posB) {
+        // if (typeof posA == "number"){
+        //     posA = this.findPosById(posA);
+        // }
+        // if (typeof posB == "number"){
+        //     posB = this.findPosById(posB);
+        // }
+        // if (posA === posB) {
+        //     return;
+        // }
+        const id = this.pathRepo.length + 1
+        const path = new Path(id, `${name}`, posA, posB, 0);
+        this.pathRepo.push(path);
+        return path;
     }
     // , routeToPath: function (route) {
     //     const path = []
