@@ -120,7 +120,4 @@ const cruise2DPos = function () {
     navRepo.pushPath("R34P11", R34, P11)
     navRepo.pushPath("R35P11", R35, P11)
     navRepo.pushPath("R35P12", R35, P12)
-
-
-    const poi = [P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13]
 }

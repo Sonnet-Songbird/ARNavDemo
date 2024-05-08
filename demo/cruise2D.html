@@ -106,7 +106,7 @@
                     this.findPosElementById(this.selected[0].id).style.display = 'none'
                     break;
                 case 2:
-                    this.tutor.textContent = `${this.selected[0].name}에서 부터 ${this.selected[0].name}까지의 경로를 보여드리겠습니다.`
+                    this.tutor.textContent = `${this.selected[0].name}에서 부터 ${this.selected[1].name}까지의 경로를 보여드리겠습니다.`
                     document.querySelectorAll(`.pos`).forEach(pos => pos.style.display = 'none')
                     drawShortestPath(this.selected[0].id, this.selected[1].id)
                     break;
