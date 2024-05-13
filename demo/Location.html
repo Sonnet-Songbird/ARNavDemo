@@ -29,6 +29,7 @@
 </body>
 <script>
     let updateLocation = true;
+    let stopUpdate = false;
     window.onload = () => {
         let testEntitiesAdded = false;
         const el = document.querySelector("[gps-new-camera]");
@@ -89,7 +90,7 @@
             });
         });
         document.getElementById("toggle").addEventListener("click", e => {
-            updateLocation = !updateLocation;
+            stopUpdate = !stopUpdate;
         })
     };
 

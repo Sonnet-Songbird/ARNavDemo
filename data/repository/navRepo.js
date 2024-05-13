@@ -92,7 +92,7 @@ class Pos {
     static type = Object.freeze({
         POI: "PoI" // 현실에서 유의미한 관심지점
         , RELAY: "Relay" // 내비게이션을 위한 정적 가상 지점
-        , DYNAMIC: "Dynamic" // 내비게이션을 위한 정적 관심 지점.
+        , DYNAMIC: "Dynamic" // 내비게이션을 위한 동적 관심 지점.
     })
 
     get x() {
@@ -152,7 +152,7 @@ class Path {
         , NONE: "None"
     })
     static trait = Object.freeze({ // 요구에 따라 사용될 수도 있는 경로 특성. 현재는 미사용
-        STAIR: "stair" // 계단을 통과 하는 경로는 피할 수 있음.
+        STAIR: "stair" // 계단을 통과 하는 경로를 피할 수 있음.
     })
 
     equals(target) {
