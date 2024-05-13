@@ -1,13 +1,13 @@
 // const canvas = document.getElementById("canvasView");
 // const ctx = canvas.getContext("2d"); 필요.
-// const canvasPostprocessing
-// 클로저 어느 쪽 방식으로 할까
+// 캔버스에 대해 전처리 알고리즘이 필요하면 const canvasPreprocessing = () => {}
+
 
 const clearCanvas = function (canvas) {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (typeof canvasPostprocessing !== 'undefined') {
-        canvasPostprocessing(canvas);
+    if (typeof canvasPreprocessing !== 'undefined') {
+        canvasPreprocessing(canvas);
     }
 }
 

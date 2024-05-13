@@ -50,12 +50,12 @@
 <script>
     const canvas = document.getElementById("canvasView");
     const ctx = canvas.getContext("2d");
-    const canvasPostprocessing = function (canvas) {
+    const canvasPreprocessing = function (canvas) {
         canvas.getContext("2d").drawImage(canvasBackground, 0, 0, canvas.width, canvas.height);
     }
     const canvasBackground = new Image();
     canvasBackground.onload = function () {
-        canvasPostprocessing(canvas, canvasBackground); // 이미지가 로드된 후 canvasPostprocessing 함수 호출
+        canvasPreprocessing(canvas, canvasBackground); // 이미지가 로드된 후 canvasPreprocessing 함수 호출
     };
     canvasBackground.src = "../data/images/cruise-deck.jpg"; // 이미지 경로 할당
 
