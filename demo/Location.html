@@ -39,20 +39,20 @@
                 alert(`최초 감지 된 GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
                 const properties = [{
                     color: 'red',
-                    latDis: 0.0005,
+                    latDis: 0.0001,
                     lonDis: 0
                 }, {
                     color: 'yellow',
-                    latDis: -0.0005,
+                    latDis: -0.0001,
                     lonDis: 0
                 }, {
                     color: 'blue',
                     latDis: 0,
-                    lonDis: -0.0005
+                    lonDis: -0.0001
                 }, {
                     color: 'green',
                     latDis: 0,
-                    lonDis: 0.0005
+                    lonDis: 0.0001
                 }
                 ];
                 testEntitiesAdded = true;
@@ -60,9 +60,9 @@
                     for (const prop of properties) {
                         const entity = document.createElement("a-box");
                         entity.setAttribute("scale", {
-                            x: 20,
-                            y: 20,
-                            z: 20
+                            x: 1,
+                            y: 1,
+                            z: 1
                         });
                         entity.setAttribute('material', {color: prop.color});
                         entity.setAttribute('gps-new-entity-place', {
