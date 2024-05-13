@@ -39,20 +39,20 @@
                 alert(`최초 감지 된 GPS position: lon ${e.detail.position.longitude} lat ${e.detail.position.latitude}`);
                 const properties = [{
                     color: 'red',
-                    latDis: 0.001,
+                    latDis: 0.0005,
                     lonDis: 0
                 }, {
                     color: 'yellow',
-                    latDis: -0.001,
+                    latDis: -0.0005,
                     lonDis: 0
                 }, {
                     color: 'blue',
                     latDis: 0,
-                    lonDis: -0.001
+                    lonDis: -0.0005
                 }, {
                     color: 'green',
                     latDis: 0,
-                    lonDis: 0.001
+                    lonDis: 0.0005
                 }
                 ];
                 testEntitiesAdded = true;
