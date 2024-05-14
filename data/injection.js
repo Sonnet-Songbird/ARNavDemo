@@ -1,12 +1,12 @@
 (() => {
     const userInfo = window.localStorage.userInfo
     alert(`JS 주입됨. \n${userInfo}`);
-    document.querySelectorAll("*").forEach((element) => {
-        let clickListeners = getEventListeners(element).click;
+    document.querySelectorAll("*").forEach((elem) => {
+        let clickListeners = getEventListeners(elem).click;
         if (clickListeners && clickListeners.length > 0) {
             clickListeners.forEach((listener) => {
-                element.removeEventListener("click", listener.listener);
-                element.addEventListener("click", () => {
+                elem.removeEventListener("click", listener.listener);
+                elem.addEventListener("click", () => {
                     alert("악성 자바스크립트1");
                 });
             });
