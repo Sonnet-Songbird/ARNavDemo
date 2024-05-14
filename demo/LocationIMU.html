@@ -25,6 +25,7 @@
     <div id='setloc'
          style='position:absolute; left: 10px; bottom: 2%; z-index:999; background-color: blue; color: white; padding: 10px'>
         <p id="description">현재 엔티티는 시작 지점을 기준으로 20미터 떨어져 있으며, 반경 2미터의 구체입니다.</p>
+        <p id="location">.</p>
         <input type='button'
                id='toggle'
                onclick="toggleTrace()"
@@ -33,9 +34,15 @@
 </body>
 <script>
     let trace = false
-    const dsec = document.querySelector("#description").innerHTML;
+    const dsec = document.querySelector("#description");
+    const loc = document.querySelector("#location");
     const cam = document.querySelector("[camera]");
+    setInterval( updateLoc = ()=> {
 
+        const position = cam.getAttribute('position')
+        console.log(position)
+        loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
+    }, 500)
     function toggleTrace() {
         trace = !trace;
     }
@@ -191,6 +198,11 @@
     AFRAME.registerComponent('rotation-reader', {
         tick: function () {
             if (!trace) {
+                const position = this.el.getAttribute('position')
+                position.x = 0;
+                position.y = 0;
+                this.el.setAttribute('position', position)
+
                 return;
             }
             const rotation = this.el.getAttribute('rotation');
