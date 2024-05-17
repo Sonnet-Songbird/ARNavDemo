@@ -265,8 +265,8 @@
             const position = this.el.getAttribute('position')
             const offset = popOffset() * 3
             const newPos = moveCoordinates(position.x, position.y, yOrientation, offset)
-            position.x = newPos.x
-            position.y = newPos.y
+            position.x = newPos.x * -0.01
+            position.y = newPos.y * 0.01
             this.el.setAttribute('position', position)
         }
     });
