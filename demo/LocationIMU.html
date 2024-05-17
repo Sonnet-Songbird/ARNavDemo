@@ -54,8 +54,6 @@
         alpha: 0, beta: 0, gamma: 0
     };
 
-    // store whole history of acceleration and implied velocity and position,
-    // starting from these initial conditions
     var z = [
         {
             position: 0,
@@ -65,8 +63,7 @@
         }
     ];
 
-    // visualize motion through a box
-    var phone = d3.select('#phone');
+    const phone = d3.select('#phone');
 
     window.addEventListener('devicemotion', handleMotion);
     window.addEventListener('deviceorientation', handleOrientation);
@@ -125,10 +122,9 @@
         return Object.assign({}, state1);
     }
 
-    // transform lil box representing your phone
     function renderState() {
         phone.style('transform', ''
-            // + 'rotateZ('+rotation.alpha+'deg) '
+            + 'rotateZ('+rotation.alpha+'deg) '
             + 'rotateX(' + rotation.beta + 'deg) '
             + 'rotateY(' + rotation.gamma + 'deg) '
             + 'translate3d(' + 0 + 'px,' + 0 + 'px,' + (-z[0].position * 1000) + 'px)'
