@@ -28,8 +28,9 @@
         <p id="location">.</p>
         <input type='button'
                id='toggle'
-               onclick="toggleTrace()"
-               value='startTrace'/>
+               onclick="toggleTrace(this)"
+               value='startTrace'
+               style="width: 150px; height: 50px; font-size: 16px; position: relative; right: 10px; top: 10px;"/>
     </div>
 </body>
 <script>
@@ -43,8 +44,9 @@
         console.log(position)
         loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
     }, 500)
-    function toggleTrace() {
+    function toggleTrace(button) {
         trace = !trace;
+        button.value = trace ? 'endTrace' : 'startTrace';
     }
 
     // store current rotation in euler angles
