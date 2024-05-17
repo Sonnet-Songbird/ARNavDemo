@@ -146,9 +146,7 @@
                 return x(d.time);
             })
             .y(function (d, i) {
-                if (i === 0) {
-                    locationOffset = d.value
-                }
+                locationOffset = d.value
                 return y(d.value);
             });
 
