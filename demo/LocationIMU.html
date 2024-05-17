@@ -254,8 +254,8 @@
 
             function moveCoordinates(currentX, currentY, directionDegree, distance) {
                 const directionRadian = directionDegree * Math.PI / 180;
-                const newX = currentX + (distance * Math.sin(directionRadian));
-                const newY = currentY + (distance * Math.cos(directionRadian));
+                const newX = currentX + (distance * Math.sin(directionRadian) * - 0.01);
+                const newY = currentY + (distance * Math.cos(directionRadian) * 0.01);
                 return {x: newX, y: newY};
             }
 
@@ -265,8 +265,8 @@
             const position = this.el.getAttribute('position')
             const offset = popOffset() * 3
             const newPos = moveCoordinates(position.x, position.y, yOrientation, offset)
-            position.x = newPos.x * -0.01
-            position.y = newPos.y * 0.01
+            position.x = newPos.x
+            position.y = newPos.y
             this.el.setAttribute('position', position)
         }
     });
