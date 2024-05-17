@@ -136,10 +136,8 @@
     let locationOffsetBefore = 0;
 
 
-    // draw graph
     function renderHistory() {
 
-        // draw three lines: x, dx, ddx
         const data = ['position', 'velocity', 'acceleration'].map(function (d, i) {
             return z.filter(function (dd) {
                 return dd.time;
@@ -153,21 +151,17 @@
 
         const svg = d3.select('svg');
 
-        const svgWidth = +svg.attr("width");
-        const svgHeight = +svg.attr("height");
-
         const x = d3.scaleLinear()
             .domain(d3.extent(d3.merge(data), function (d) {
                 return d.time;
             }))
-            .range([0, svgWidth]);
+            .range([0, 1]);
 
         const y = d3.scaleLinear()
             .domain(d3.extent(d3.merge(data), function (d) {
                 return d.value;
             }))
-            .range([0, svgHeight]);
-
+            .range([0, 1]);
 
         const line = d3.line()
             .x(function (d, i) {
@@ -225,8 +219,8 @@
 
             function moveCoordinates(currentX, currentY, directionDegree, distance) {
                 const directionRadian = directionDegree * Math.PI / 180;
-                const newX = currentX + (distance * Math.cos(directionRadian));
-                const newY = currentY + (distance * Math.sin(directionRadian));
+                const newX = currentX + (distance * Math.sin(directionRadian));
+                const newY = currentY + (distance * Math.cos(directionRadian));
                 return {x: newX, y: newY};
             }
 
