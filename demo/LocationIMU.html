@@ -216,9 +216,7 @@
             }
 
             function popOffset() {
-                const diff = locationOffset - locationOffsetBefore
-                locationOffsetBefore = locationOffset;
-                return diff
+                return locationOffsetBefore + locationOffset
             }
 
             function moveCoordinates(currentX, currentY, directionDegree, distance) {
@@ -232,7 +230,7 @@
             const yOrientation = y;
 
             const position = this.el.getAttribute('position')
-            const offset = popOffset()
+            const offset = popOffset()*3
             const newPos = moveCoordinates(position.x, position.y, yOrientation, offset)
             position.x = newPos.x
             position.y = newPos.y
