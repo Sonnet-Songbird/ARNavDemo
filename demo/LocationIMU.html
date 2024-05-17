@@ -57,7 +57,7 @@
     </a-scene>
     <div id='setloc'
          style='position:absolute; left: 10px; bottom: 2%; z-index:999; background-color: blue; color: white; padding: 10px'>
-        <p id="description">현재 엔티티는 시작 지점을 기준으로 20미터 떨어져 있으며, 반경 2미터의 구체입니다.</p>
+        <p id="description">현재 엔티티는 시작 지점을 기준으로 20미터 떨어져 있으며, 반경 2미터의 구체이며 현재 계수는 0.03입니다.</p>
         <p id="location">.</p>
         <input type='button'
                id='toggle'
@@ -254,8 +254,8 @@
 
             function moveCoordinates(currentX, currentY, directionDegree, distance) {
                 const directionRadian = directionDegree * Math.PI / 180;
-                const newX = currentX + (distance * Math.sin(directionRadian) * - 0.01);
-                const newY = currentY + (distance * Math.cos(directionRadian) * 0.01);
+                const newX = currentX + (distance * Math.sin(directionRadian) * - 0.03);
+                const newY = currentY + (distance * Math.cos(directionRadian) * 0.03);
                 return {x: newX, y: newY};
             }
 
