@@ -40,8 +40,8 @@
     setInterval( updateLoc = ()=> {
 
         const position = cam.getAttribute('position')
-        // console.log(position)
-        // loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
+        console.log(position)
+        loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
     }, 500)
     function toggleTrace() {
         trace = !trace;
@@ -109,7 +109,7 @@
         newZ.velocity *= .9; // friction
         newZ.velocity = Math.abs(newZ.velocity) < .01 ? 0 : newZ.velocity; // noise filter
         newZ.position *= .999; // tend back to zero
-        loc.innerHTML = `현재 위치는 ${position}입니다.`
+
         z.unshift(newZ);
     }
 
@@ -134,7 +134,7 @@
     }
 
     let orientation = 0;
-    let locationOffset;
+    let locationOffset = 0;
     let locationOffsetBefore = 0;
 
 
