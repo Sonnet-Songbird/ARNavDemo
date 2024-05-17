@@ -33,28 +33,15 @@
                style="width: 150px; height: 50px; font-size: 16px; position: relative; right: 10px; top: 10px;"/>
     </div>
 </body>
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-    let trace = false
-    const dsec = document.querySelector("#description");
-    const loc = document.querySelector("#location");
-    const cam = document.querySelector("[camera]");
-    setInterval( updateLoc = ()=> {
-
-        const position = cam.getAttribute('position')
-        console.log(position)
-        loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
-    }, 500)
-    function toggleTrace(button) {
-        trace = !trace;
-        button.value = trace ? 'endTrace' : 'startTrace';
-    }
-
-    // store current rotation in euler angles
-    var rotation = {
+    let rotation = {
         alpha: 0, beta: 0, gamma: 0
     };
 
-    var z = [
+    const z = [
         {
             position: 0,
             velocity: 0,
@@ -72,7 +59,6 @@
     d3.timer(renderState);
     d3.interval(renderHistory, 500);
 
-    // not the focus here, but it also shows rotation!
     function handleOrientation(e) {
         if (e.gamma === null || e.beta === null || e.alpha === null) return;
         rotation = {
@@ -82,24 +68,22 @@
         }
     }
 
-    // accelerate according to z-axis device motion
     function handleMotion(e) {
         if (e.acceleration.x === null || e.acceleration.y === null || e.acceleration.z === null) return;
         accelerate(e.acceleration.z, e.timeStamp);
     }
 
-    // for testing on desktop, basically: map horizontal mouse position to acceleration
     function handleMousemove(e) {
-        const mouseAccelerator = d3.scaleLinear()
+        var mouseAccelerator = d3.scaleLinear()
             .domain([0, innerWidth])
             .range([-.2, .2]);
         accelerate(mouseAccelerator(e.pageX), e.timeStamp);
+        console.log(mouseAccelerator(e.pageX));
     }
 
-    // step forward with new acceleration, applying some very crude filtering & friction
     function accelerate(a, t) {
 
-        let newZ = Object.assign({}, z[0]);
+        var newZ = Object.assign({}, z[0]);
 
         newZ.acceleration = Math.abs(a) > .1 ? a : 0; // noise filter
         newZ.time = t;
@@ -112,9 +96,8 @@
         z.unshift(newZ);
     }
 
-    // euler double integration
     function eulerStep(state0, state1) {
-        const interval = (state1.time - state0.time) / 1000; // convert ms to s
+        var interval = (state1.time - state0.time) / 1000; // convert ms to s
         if (interval) {
             state1.position = state0.position + state0.velocity * interval;
             state1.velocity = state0.velocity + state0.acceleration * interval;
@@ -124,21 +107,16 @@
 
     function renderState() {
         phone.style('transform', ''
-            + 'rotateZ('+rotation.alpha+'deg) '
+            // + 'rotateZ('+rotation.alpha+'deg) '
             + 'rotateX(' + rotation.beta + 'deg) '
             + 'rotateY(' + rotation.gamma + 'deg) '
             + 'translate3d(' + 0 + 'px,' + 0 + 'px,' + (-z[0].position * 1000) + 'px)'
         );
     }
 
-    let orientation = 0;
-    let locationOffset = 0;
-    let locationOffsetBefore = 0;
-
-
     function renderHistory() {
 
-        const data = ['position', 'velocity', 'acceleration'].map(function (d, i) {
+        var data = ['position', 'velocity', 'acceleration'].map(function (d, i) {
             return z.filter(function (dd) {
                 return dd.time;
             }).map(function (dd, ii) {
@@ -149,21 +127,21 @@
             });
         });
 
-        const svg = d3.select('svg');
+        var svg = d3.select('svg');
 
-        const x = d3.scaleLinear()
+        var x = d3.scaleLinear()
             .domain(d3.extent(d3.merge(data), function (d) {
                 return d.time;
             }))
-            .range([0, 1]);
+            .range([0, svg.node().getBoundingClientRect().width]);
 
-        const y = d3.scaleLinear()
+        var y = d3.scaleLinear()
             .domain(d3.extent(d3.merge(data), function (d) {
                 return d.value;
             }))
-            .range([0, 1]);
+            .range([0, svg.node().getBoundingClientRect().height]);
 
-        const line = d3.line()
+        var line = d3.line()
             .x(function (d, i) {
                 return x(d.time);
             })
@@ -174,7 +152,8 @@
                 return y(d.value);
             });
 
-        const path = svg.selectAll('path')
+
+        var path = svg.selectAll('path')
             .data(data);
 
         path.enter().append('path')
@@ -189,7 +168,29 @@
 
         path.attr('d', line);
 
+
     }
+
+
+    let trace = false
+    const dsec = document.querySelector("#description");
+    const loc = document.querySelector("#location");
+    const cam = document.querySelector("[camera]");
+    setInterval(updateLoc = () => {
+
+        const position = cam.getAttribute('position')
+        console.log(position)
+        loc.innerHTML = `현재 위치는 ${position.x},${position.y}입니다.`
+    }, 500)
+
+    function toggleTrace(button) {
+        trace = !trace;
+        button.value = trace ? 'endTrace' : 'startTrace';
+    }
+
+    let orientation = 0;
+    let locationOffset = 0;
+    let locationOffsetBefore = 0;
 
     AFRAME.registerComponent('rotation-reader', {
         tick: function () {
@@ -228,7 +229,7 @@
             const yOrientation = y;
 
             const position = this.el.getAttribute('position')
-            const offset = popOffset()*3
+            const offset = popOffset() * 3
             const newPos = moveCoordinates(position.x, position.y, yOrientation, offset)
             position.x = newPos.x
             position.y = newPos.y
