@@ -10,7 +10,40 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src='index.js'></script>
 </head>
+<style>
+
+
+
+    svg {
+        position: absolute;
+        width: 10%;
+        height: 10%;
+        top: 0;
+        left: 0;
+    }
+
+    path {
+        stroke: black;
+        stroke-width: 1;
+        fill: none;
+    }
+
+    #phone {
+        border: 5px solid black;
+        width: 100%;
+        height: 100%;
+    }
+
+</style>
+
 <body>
+
+    <svg>
+    </svg>
+
+    <div id="phone"></div>
+
+
     <a-scene environment="preset: default;">
 
         <a-entity id="mouseCursor" cursor="rayOrigin: mouse"></a-entity>
@@ -32,6 +65,7 @@
                value='startTrace'
                style="width: 150px; height: 50px; font-size: 16px; position: relative; right: 10px; top: 10px;"/>
     </div>
+
 </body>
 
 
@@ -146,7 +180,9 @@
                 return x(d.time);
             })
             .y(function (d, i) {
-                locationOffset = d.value
+                if (i === 0) {
+                    locationOffset = d.value
+                }
                 return y(d.value);
             });
 
